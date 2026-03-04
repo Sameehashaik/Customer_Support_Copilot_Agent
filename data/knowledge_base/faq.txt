@@ -1,0 +1,25 @@
+CUSTOMER SUPPORT FAQ
+
+Q: How do I track my order?
+A: Visit our tracking page and enter your order number. You'll see real-time updates.
+
+Q: What is your return policy?
+A: 30-day returns. Items must be unused in original packaging. Refunds in 5-7 business days.
+
+Q: How long does shipping take?
+A: Standard 5-7 days. Express 2-3 days. International 10-14 days.
+
+Q: How do I change my shipping address?
+A: Contact support immediately if order hasn't shipped. After shipping, contact carrier.
+
+Q: What payment methods do you accept?
+A: Visa, MasterCard, Amex, Discover, PayPal, Apple Pay, Google Pay.
+
+Q: How do I cancel my order?
+A: Cancel within 1 hour via account dashboard. After that, contact support.
+
+Q: Is my payment secure?
+A: Yes, 256-bit SSL encryption. We never store full card numbers.
+
+Q: How do I contact support?
+A: Live chat (9am-9pm EST), Email: support@example.com, Phone: 1-800-SUPPORT

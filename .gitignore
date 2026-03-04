@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+*.log
+.DS_Store
+venv/
+.vscode/
+project4_costs.json
+outputs/
+escalations.json
