@@ -158,8 +158,10 @@ class SupportAgent:
         if not guardrail_result['safe']:
             logger.warning(f"Guardrails blocked response: {guardrail_result['issues']}")
             response = guardrail_result.get('modified_response', response)
-            if not self.guardrails.check_response(response)['safe']:
+            guardrail_result = self.guardrails.check_response(response)
+            if not guardrail_result['safe']:
                 response = self._create_safe_fallback_response()
+                guardrail_result = {'safe': True}  # Fallback is always safe
 
         # Step 8: Add agent response to memory
         self.memory.add_message('agent', response, {})
