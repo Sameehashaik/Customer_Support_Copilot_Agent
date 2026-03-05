@@ -168,7 +168,7 @@ class SupportAgent:
 
         logger.info(f"{'='*60}\n")
 
-        return {
+        result = {
             'response': response,
             'intent': intent,
             'intent_confidence': intent_result['confidence'],
@@ -179,6 +179,8 @@ class SupportAgent:
             'safe': guardrail_result['safe'],
             'cost': self._calculate_session_cost()
         }
+        result['needs_human_review'] = self._needs_review(result)
+        return result
 
     def _generate_response(self, message: str, intent: str, sentiment: float) -> str:
         """Generate response using Claude"""
@@ -196,7 +198,7 @@ class SupportAgent:
 {conversation_context}
 
 ## Your Task
-Respond to the customer following your instructions. Be helpful, empathetic, and professional.
+Write a direct response to the customer. Output ONLY the message that will be sent to the customer - nothing else. No reasoning, no strategy notes, no bullet points, no meta-commentary, no "Key considerations", no explanations of your approach. Just the customer-facing message.
 """
 
         try:
@@ -224,7 +226,7 @@ Respond to the customer following your instructions. Be helpful, empathetic, and
         """Create response for escalated conversation"""
         response = "I understand this is important to you. Let me connect you with one of our specialists who can help you right away. Please hold for just a moment."
 
-        return {
+        result = {
             'response': response,
             'intent': intent,
             'intent_confidence': 1.0,
@@ -235,6 +237,29 @@ Respond to the customer following your instructions. Be helpful, empathetic, and
             'safe': True,
             'cost': 0.0
         }
+        result['needs_human_review'] = True  # Always review escalations
+        return result
+
+    def _needs_review(self, result: Dict) -> bool:
+        """Determine if response needs human review before sending"""
+        # Auto-escalated
+        if result['escalated']:
+            return True
+        # Risky intents always need review
+        if result['intent'] in ('refund_request', 'complaint'):
+            return True
+        # Negative sentiment
+        if result['sentiment_score'] < 0.4:
+            return True
+        # Safety check failed
+        if not result['safe']:
+            return True
+        # Low confidence only matters for non-trivial intents
+        safe_intents = ('greeting', 'general_inquiry', 'order_status',
+                        'shipping_question', 'product_question')
+        if result['intent'] not in safe_intents and result['intent_confidence'] < 0.7:
+            return True
+        return False
 
     def _create_safe_fallback_response(self) -> str:
         """Safe fallback response if generation fails"""
