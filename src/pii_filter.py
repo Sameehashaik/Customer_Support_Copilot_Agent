@@ -45,7 +45,7 @@ class PIIFilter:
         'CREDIT_CARD': r'\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b',
         'IP_ADDRESS': r'\b(?:\d{1,3}\.){3}\d{1,3}\b',
         'ORDER_ID': r'\b(?:order|tracking)[\s#:]*(?=[A-Z0-9]*\d)[A-Z0-9]{6,15}\b',
-        'ZIP_CODE': r'\b\d{5}(?:-\d{4})?\b',
+        'ZIP_CODE': r'\b\d{5}-\d{4}\b',
     }
 
     def __init__(self, use_ner: bool = True):
